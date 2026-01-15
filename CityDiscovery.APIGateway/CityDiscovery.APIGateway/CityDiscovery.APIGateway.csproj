@@ -7,7 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <!-- YARP Reverse Proxy -->
+    <PackageReference Include="Yarp.ReverseProxy" Version="2.1.0" />
+    
+    <!-- Serilog for structured logging -->
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
+    
+    <!-- JWT Authentication (explicit for net8.0) -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    
+    <!-- OpenAPI/Swagger for gateway endpoints -->
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
 </Project>
