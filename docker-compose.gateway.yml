@@ -1,20 +1,6 @@
-# ============================================================================
-# CityDiscovery Gateway Docker Compose
-# ============================================================================
-# This compose file runs the complete CityDiscovery microservices stack including:
-# - API Gateway
-# - Identity Service
-# - All downstream services (Venue, Social, Review, Admin)
-# - Infrastructure (MSSQL, RabbitMQ)
-#
-# Usage:
-#   docker-compose -f docker-compose.gateway.yml up -d --build
-# ============================================================================
 
 services:
-  # ==========================================================================
-  # Infrastructure Services
-  # ==========================================================================
+
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
@@ -53,9 +39,34 @@ services:
       - citydiscovery-network
     restart: unless-stopped
 
-  # ==========================================================================
-  # Identity Service
-  # ==========================================================================
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false 
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" 
+    ports:
+      - "9200:9200"
+    networks:
+      - citydiscovery-network
+    restart: unless-stopped
+
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.1
+    container_name: kibana
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - citydiscovery-network
+    restart: unless-stopped
+
+
   identity-service:
     build:
       context: ./CityDiscovery.IdentityService/IdentityService
@@ -68,6 +79,9 @@ services:
         condition: service_healthy
       mssql:
         condition: service_healthy
+      elasticsearch:
+        condition: service_started
+
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
@@ -79,13 +93,12 @@ services:
       - RabbitMq__VirtualHost=/
       - RabbitMq__Username=guest
       - RabbitMq__Password=guest
+      - Elasticsearch__Url=http://elasticsearch:9200
     networks:
       - citydiscovery-network
     restart: unless-stopped
 
-  # ==========================================================================
-  # API Gateway
-  # ==========================================================================
+
   gateway:
     build:
       context: ./CityDiscovery.APIGateway/CityDiscovery.APIGateway/CityDiscovery.APIGateway
@@ -114,9 +127,7 @@ services:
       - citydiscovery-network
     restart: unless-stopped
 
-  # ==========================================================================
-  # Venue Service
-  # ==========================================================================
+
   venue-service:
     build:
       context: ./CityDiscovery.VenueService/CityDiscovery.VenueService/CityDiscovery.VenueService
@@ -129,6 +140,8 @@ services:
         condition: service_healthy
       mssql:
         condition: service_healthy
+      elasticsearch:
+        condition: service_started
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ASPNETCORE_URLS=http://+:80
@@ -140,13 +153,13 @@ services:
       - RabbitMQ__Port=5672
       - RabbitMQ__Username=guest
       - RabbitMQ__Password=guest
+      - Elasticsearch__Url=http://elasticsearch:9200
+
     networks:
       - citydiscovery-network
     restart: unless-stopped
 
-  # ==========================================================================
-  # Social Service
-  # ==========================================================================
+
   social-service:
     build:
       context: ./CityDiscovery.SocialService/CityDiscovery.SocialService/CityDiscovery.SocialService
@@ -174,9 +187,7 @@ services:
       - citydiscovery-network
     restart: unless-stopped
 
-  # ==========================================================================
-  # Review Service
-  # ==========================================================================
+
   review-service:
     build:
       context: ./CityDiscovery.ReviewService/CityDiscovery.ReviewService/CityDiscovery.ReviewService
@@ -204,9 +215,7 @@ services:
       - citydiscovery-network
     restart: unless-stopped
 
-  # ==========================================================================
-  # Admin/Notification Service
-  # ==========================================================================
+
   admin-service:
     build:
       context: ./CityDiscovery.AdminNotificationService/CityDiscovery.AdminNotificationService/CityDiscovery.AdminNotificationService
@@ -234,15 +243,11 @@ services:
       - citydiscovery-network
     restart: unless-stopped
 
-# ============================================================================
-# Networks
-# ============================================================================
+
 networks:
   citydiscovery-network:
     driver: bridge
 
-# ============================================================================
-# Volumes
-# ============================================================================
+
 volumes:
   mssql-data:
