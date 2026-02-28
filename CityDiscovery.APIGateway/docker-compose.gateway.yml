@@ -81,7 +81,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Server=mssql;Database=CityDiscovery_IdentityDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=Discovery_IdentityDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
       - Jwt__Issuer=identity
       - Jwt__Audience=citydiscovery
       - Jwt__Key=pLw3V!zJg7^2qK0xD8mR4tY1uC6bN9fQ5sH3kL0wX2yZ8rT6vB1nM4pQ7sU2dE9
@@ -111,7 +111,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Server=mssql;Database=CityDiscovery_VenueDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=Discovery_VenueDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
       - Jwt__Issuer=identity
       - Jwt__Audience=citydiscovery
       - Jwt__Key=pLw3V!zJg7^2qK0xD8mR4tY1uC6bN9fQ5sH3kL0wX2yZ8rT6vB1nM4pQ7sU2dE9
@@ -139,7 +139,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Server=mssql;Database=CityDiscovery_SocialDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=Discovery_SocialDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
       - Jwt__Issuer=identity
       - Jwt__Audience=citydiscovery
       - Jwt__Key=pLw3V!zJg7^2qK0xD8mR4tY1uC6bN9fQ5sH3kL0wX2yZ8rT6vB1nM4pQ7sU2dE9
@@ -166,7 +166,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Server=mssql;Database=CityDiscovery_ReviewDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=Discovery_ReviewDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
       - Jwt__Issuer=identity
       - Jwt__Audience=citydiscovery
       - Jwt__Key=pLw3V!zJg7^2qK0xD8mR4tY1uC6bN9fQ5sH3kL0wX2yZ8rT6vB1nM4pQ7sU2dE9
@@ -193,7 +193,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Server=mssql;Database=CityDiscovery_AdminDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=Discovery_AdminDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
       - Jwt__Issuer=identity
       - Jwt__Audience=citydiscovery
       - Jwt__Key=pLw3V!zJg7^2qK0xD8mR4tY1uC6bN9fQ5sH3kL0wX2yZ8rT6vB1nM4pQ7sU2dE9
