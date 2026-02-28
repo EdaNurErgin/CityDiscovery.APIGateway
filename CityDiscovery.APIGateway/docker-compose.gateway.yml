@@ -1,4 +1,3 @@
-
 services:
 
   rabbitmq:
@@ -52,7 +51,6 @@ services:
       - citydiscovery-network
     restart: unless-stopped
 
-
   kibana:
     image: docker.elastic.co/kibana/kibana:8.11.1
     container_name: kibana
@@ -66,10 +64,9 @@ services:
       - citydiscovery-network
     restart: unless-stopped
 
-
   identity-service:
     build:
-      context: ./CityDiscovery.IdentityService/IdentityService
+      context: ./CityDiscovery.IdentityService 
       dockerfile: Dockerfile
     container_name: identity-service
     ports:
@@ -81,9 +78,8 @@ services:
         condition: service_healthy
       elasticsearch:
         condition: service_started
-
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__DefaultConnection=Server=mssql;Database=CityDiscovery_IdentityDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
       - Jwt__Issuer=identity
@@ -98,16 +94,126 @@ services:
       - citydiscovery-network
     restart: unless-stopped
 
+  venue-service:
+    build:
+      context: ./CityDiscovery.VenueService/CityDiscovery.VenueService 
+      dockerfile: Dockerfile
+    container_name: venue-service
+    ports:
+      - "5002:80"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mssql:
+        condition: service_healthy
+      elasticsearch:
+        condition: service_started
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=CityDiscovery_VenueDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
+      - Jwt__Issuer=identity
+      - Jwt__Audience=citydiscovery
+      - Jwt__Key=pLw3V!zJg7^2qK0xD8mR4tY1uC6bN9fQ5sH3kL0wX2yZ8rT6vB1nM4pQ7sU2dE9
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+      - Elasticsearch__Url=http://elasticsearch:9200
+    networks:
+      - citydiscovery-network
+    restart: unless-stopped
+
+  social-service:
+    build:
+      context: ./CityDiscovery.SocialService/CityDiscovery.SocialService 
+      dockerfile: Dockerfile
+    container_name: social-service
+    ports:
+      - "5003:80"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mssql:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=CityDiscovery_SocialDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
+      - Jwt__Issuer=identity
+      - Jwt__Audience=citydiscovery
+      - Jwt__Key=pLw3V!zJg7^2qK0xD8mR4tY1uC6bN9fQ5sH3kL0wX2yZ8rT6vB1nM4pQ7sU2dE9
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    networks:
+      - citydiscovery-network
+    restart: unless-stopped
+
+  review-service:
+    build:
+      context: ./CityDiscovery.ReviewService/CityDiscovery.ReviewService 
+      dockerfile: Dockerfile
+    container_name: review-service
+    ports:
+      - "5004:80"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mssql:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=CityDiscovery_ReviewDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
+      - Jwt__Issuer=identity
+      - Jwt__Audience=citydiscovery
+      - Jwt__Key=pLw3V!zJg7^2qK0xD8mR4tY1uC6bN9fQ5sH3kL0wX2yZ8rT6vB1nM4pQ7sU2dE9
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    networks:
+      - citydiscovery-network
+    restart: unless-stopped
+
+  admin-service:
+    build:
+      context: ./CityDiscovery.AdminNotificationService/CityDiscovery.AdminNotificationService
+      dockerfile: Dockerfile
+    container_name: admin-service
+    ports:
+      - "5005:80"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      mssql:
+        condition: service_healthy
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=mssql;Database=CityDiscovery_AdminDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
+      - Jwt__Issuer=identity
+      - Jwt__Audience=citydiscovery
+      - Jwt__Key=pLw3V!zJg7^2qK0xD8mR4tY1uC6bN9fQ5sH3kL0wX2yZ8rT6vB1nM4pQ7sU2dE9
+      - RabbitMQ__Host=rabbitmq
+      - RabbitMQ__Port=5672
+      - RabbitMQ__Username=guest
+      - RabbitMQ__Password=guest
+    networks:
+      - citydiscovery-network
+    restart: unless-stopped
 
   gateway:
     build:
-      context: ./CityDiscovery.APIGateway/CityDiscovery.APIGateway/CityDiscovery.APIGateway
+      context: ./CityDiscovery.APIGateway/CityDiscovery.APIGateway 
       dockerfile: Dockerfile
     container_name: gateway
     ports:
       - "5000:80"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
       - Jwt__Issuer=identity
       - Jwt__Audience=citydiscovery
@@ -127,127 +233,9 @@ services:
       - citydiscovery-network
     restart: unless-stopped
 
-
-  venue-service:
-    build:
-      context: ./CityDiscovery.VenueService/CityDiscovery.VenueService/CityDiscovery.VenueService
-      dockerfile: Dockerfile
-    container_name: venue-service
-    ports:
-      - "5002:80"
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      mssql:
-        condition: service_healthy
-      elasticsearch:
-        condition: service_started
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Server=mssql;Database=CityDiscovery_VenueDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
-      - Jwt__Issuer=identity
-      - Jwt__Audience=citydiscovery
-      - Jwt__Key=pLw3V!zJg7^2qK0xD8mR4tY1uC6bN9fQ5sH3kL0wX2yZ8rT6vB1nM4pQ7sU2dE9
-      - RabbitMQ__Host=rabbitmq
-      - RabbitMQ__Port=5672
-      - RabbitMQ__Username=guest
-      - RabbitMQ__Password=guest
-      - Elasticsearch__Url=http://elasticsearch:9200
-
-    networks:
-      - citydiscovery-network
-    restart: unless-stopped
-
-
-  social-service:
-    build:
-      context: ./CityDiscovery.SocialService/CityDiscovery.SocialService/CityDiscovery.SocialService
-      dockerfile: Dockerfile
-    container_name: social-service
-    ports:
-      - "5003:80"
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      mssql:
-        condition: service_healthy
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Server=mssql;Database=CityDiscovery_SocialDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
-      - Jwt__Issuer=identity
-      - Jwt__Audience=citydiscovery
-      - Jwt__Key=pLw3V!zJg7^2qK0xD8mR4tY1uC6bN9fQ5sH3kL0wX2yZ8rT6vB1nM4pQ7sU2dE9
-      - RabbitMQ__Host=rabbitmq
-      - RabbitMQ__Port=5672
-      - RabbitMQ__Username=guest
-      - RabbitMQ__Password=guest
-    networks:
-      - citydiscovery-network
-    restart: unless-stopped
-
-
-  review-service:
-    build:
-      context: ./CityDiscovery.ReviewService/CityDiscovery.ReviewService/CityDiscovery.ReviewService
-      dockerfile: Dockerfile
-    container_name: review-service
-    ports:
-      - "5004:80"
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      mssql:
-        condition: service_healthy
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Server=mssql;Database=CityDiscovery_ReviewDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
-      - Jwt__Issuer=identity
-      - Jwt__Audience=citydiscovery
-      - Jwt__Key=pLw3V!zJg7^2qK0xD8mR4tY1uC6bN9fQ5sH3kL0wX2yZ8rT6vB1nM4pQ7sU2dE9
-      - RabbitMQ__Host=rabbitmq
-      - RabbitMQ__Port=5672
-      - RabbitMQ__Username=guest
-      - RabbitMQ__Password=guest
-    networks:
-      - citydiscovery-network
-    restart: unless-stopped
-
-
-  admin-service:
-    build:
-      context: ./CityDiscovery.AdminNotificationService/CityDiscovery.AdminNotificationService/CityDiscovery.AdminNotificationService
-      dockerfile: Dockerfile
-    container_name: admin-service
-    ports:
-      - "5005:80"
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
-      mssql:
-        condition: service_healthy
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__DefaultConnection=Server=mssql;Database=CityDiscovery_AdminDb;User Id=sa;Password=Eda12345!;TrustServerCertificate=True;
-      - Jwt__Issuer=identity
-      - Jwt__Audience=citydiscovery
-      - Jwt__Key=pLw3V!zJg7^2qK0xD8mR4tY1uC6bN9fQ5sH3kL0wX2yZ8rT6vB1nM4pQ7sU2dE9
-      - RabbitMQ__Host=rabbitmq
-      - RabbitMQ__Port=5672
-      - RabbitMQ__Username=guest
-      - RabbitMQ__Password=guest
-    networks:
-      - citydiscovery-network
-    restart: unless-stopped
-
-
 networks:
   citydiscovery-network:
     driver: bridge
-
 
 volumes:
   mssql-data:
