@@ -92,6 +92,8 @@ services:
       - RabbitMq__Username=guest
       - RabbitMq__Password=guest
       - Elasticsearch__Url=http://elasticsearch:9200
+      - LocalFileStorage__RootPath=/app/wwwroot/uploads/avatars
+      - LocalFileStorage__BaseUrl=http://172.20.10.3:5000
     networks:
       - citydiscovery-network
     restart: unless-stopped
@@ -155,6 +157,8 @@ services:
       - RabbitMQ__Port=5672
       - RabbitMQ__Username=guest
       - RabbitMQ__Password=guest
+      - LocalFileStorage__RootPath=/app/wwwroot/uploads/posts
+      - LocalFileStorage__BaseUrl=http://172.20.10.3:5000
     networks:
       - citydiscovery-network
     restart: unless-stopped
