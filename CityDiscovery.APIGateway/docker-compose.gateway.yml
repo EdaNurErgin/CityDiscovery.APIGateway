@@ -72,7 +72,7 @@ services:
     ports:
       - "5001:80"
     volumes:
-      - C:/Upload
+      - C:/uploads:/app/uploads
     depends_on:
       rabbitmq:
         condition: service_healthy
