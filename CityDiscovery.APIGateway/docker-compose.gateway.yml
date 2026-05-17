@@ -98,15 +98,16 @@ services:
       - citydiscovery-network
     restart: unless-stopped
 
+
   venue-service:
     build:
-      context: ./CityDiscovery.VenueService/CityDiscovery.VenueService 
-      dockerfile: Dockerfile
+      context: . 
+      dockerfile: ./CityDiscovery.VenueService/CityDiscovery.VenueService/Dockerfile 
     container_name: venue-service
     ports:
       - "5002:80"
     volumes:
-      - C:\CityDiscoveryUploads\VenuePhotos:/app/uploads
+      - ./uploads/VenuePhotos:/app/uploads  
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -126,8 +127,8 @@ services:
       - RabbitMQ__Username=guest
       - RabbitMQ__Password=guest
       - Elasticsearch__Url=http://elasticsearch:9200
-      - LocalFileStorage__RootPath=/app/uploads
-      - LocalFileStorage__BaseUrl=http://172.20.10.3:5000/uploads
+      - LocalFileStorageOptions__RootPath=/app/uploads 
+      - LocalFileStorageOptions__BaseUrl=http://172.20.10.3:5000 
     networks:
       - citydiscovery-network
     restart: unless-stopped
