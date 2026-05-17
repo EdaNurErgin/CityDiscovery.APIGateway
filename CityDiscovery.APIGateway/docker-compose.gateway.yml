@@ -72,7 +72,7 @@ services:
     ports:
       - "5001:80"
     volumes:
-      - ./uploads/AvatarPhotos:/app/wwwroot/uploads/avatars
+      - C:/Upload
     depends_on:
       rabbitmq:
         condition: service_healthy
