@@ -123,7 +123,7 @@ services:
       - RabbitMQ__Password=guest
       - Elasticsearch__Url=http://elasticsearch:9200
       - LocalFileStorage__RootPath=/app/uploads
-      - LocalFileStorage__BaseUrl=http://172.20.10.3:5002/uploads
+      - LocalFileStorage__BaseUrl=http://172.20.10.3:5000/uploads
     networks:
       - citydiscovery-network
     restart: unless-stopped
