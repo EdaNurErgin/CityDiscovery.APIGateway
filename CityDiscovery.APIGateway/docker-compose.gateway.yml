@@ -71,6 +71,8 @@ services:
     container_name: identity-service
     ports:
       - "5001:80"
+    volumes:
+      - C:\CityDiscoveryUploads\AvatarPhotos:/app/wwwroot/uploads/avatars
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -135,6 +137,8 @@ services:
     container_name: social-service
     ports:
       - "5003:80"
+    volumes:
+      - C:\CityDiscoveryUploads\PostPhotos:/app/wwwroot/uploads/posts
     depends_on:
       rabbitmq:
         condition: service_healthy
