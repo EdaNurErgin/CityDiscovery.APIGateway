@@ -66,13 +66,13 @@ services:
 
   identity-service:
     build:
-      context: .  
-      dockerfile: ./CityDiscovery.IdentityService/Dockerfile 
+      context: ./CityDiscovery.IdentityService 
+      dockerfile: Dockerfile
     container_name: identity-service
     ports:
       - "5001:80"
     volumes:
-      - ./uploads/AvatarPhotos:/app/wwwroot/uploads/avatars
+      - C:\CityDiscoveryUploads\AvatarPhotos:/app/wwwroot/uploads/avatars
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -97,7 +97,6 @@ services:
     networks:
       - citydiscovery-network
     restart: unless-stopped
-
 
 
   venue-service:
