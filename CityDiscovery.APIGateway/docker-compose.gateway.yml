@@ -72,7 +72,7 @@ services:
     ports:
       - "5001:80"
     volumes:
-      - C:/Proje/uploads/AvatarPhotos:/app/wwwroot/uploads/avatars
+      - ./uploads/AvatarPhotos:/app/wwwroot/uploads/avatars
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -107,7 +107,7 @@ services:
     ports:
       - "5002:80"
     volumes:
-      - C:/Proje/uploads/VenuePhotos:/app/uploads  
+      - ./uploads/VenuePhotos:/app/uploads  
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -141,7 +141,7 @@ services:
     ports:
       - "5003:80"
     volumes:
-      - C:/Proje/uploads/PostPhotos:/app/wwwroot/uploads/posts
+      - ./uploads/PostPhotos:/app/wwwroot/uploads/posts
     depends_on:
       rabbitmq:
         condition: service_healthy
