@@ -43,8 +43,8 @@ services:
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=false 
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m" 
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ports:
       - "9200:9200"
     networks:
@@ -66,8 +66,8 @@ services:
 
   identity-service:
     build:
-      context: .
-      dockerfile: ./CityDiscovery.IdentityService/Dockerfile 
+      context: ./CityDiscovery.IdentityService
+      dockerfile: Dockerfile
     container_name: identity-service
     ports:
       - "5001:80"
@@ -98,11 +98,10 @@ services:
       - citydiscovery-network
     restart: unless-stopped
 
-
   venue-service:
     build:
-      context: . 
-      dockerfile: ./CityDiscovery.VenueService/CityDiscovery.VenueService/Dockerfile 
+      context: ./CityDiscovery.VenueService/CityDiscovery.VenueService
+      dockerfile: Dockerfile
     container_name: venue-service
     ports:
       - "5002:80"
@@ -127,15 +126,15 @@ services:
       - RabbitMQ__Username=guest
       - RabbitMQ__Password=guest
       - Elasticsearch__Url=http://elasticsearch:9200
-      - LocalFileStorageOptions__RootPath=/app/uploads 
-      - LocalFileStorageOptions__BaseUrl=http://172.20.10.3:5000 
+      - LocalFileStorageOptions__RootPath=/app/uploads
+      - LocalFileStorageOptions__BaseUrl=http://172.20.10.3:5000
     networks:
       - citydiscovery-network
     restart: unless-stopped
 
   social-service:
     build:
-      context: ./CityDiscovery.SocialService/CityDiscovery.SocialService 
+      context: ./CityDiscovery.SocialService/CityDiscovery.SocialService
       dockerfile: Dockerfile
     container_name: social-service
     ports:
@@ -166,7 +165,7 @@ services:
 
   review-service:
     build:
-      context: ./CityDiscovery.ReviewService/CityDiscovery.ReviewService 
+      context: ./CityDiscovery.ReviewService/CityDiscovery.ReviewService
       dockerfile: Dockerfile
     container_name: review-service
     ports:
@@ -220,7 +219,7 @@ services:
 
   gateway:
     build:
-      context: ./CityDiscovery.APIGateway/CityDiscovery.APIGateway 
+      context: ./CityDiscovery.APIGateway/CityDiscovery.APIGateway
       dockerfile: Dockerfile
     container_name: gateway
     ports:
@@ -254,4 +253,4 @@ volumes:
   mssql-data:
   avatar-data:
   venue-data:
-  post-data:  
+  post-data:
