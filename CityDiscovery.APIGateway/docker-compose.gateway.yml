@@ -72,7 +72,7 @@ services:
     ports:
       - "5001:80"
     volumes:
-      - ./uploads/AvatarPhotos:/app/wwwroot/uploads/avatars
+      - avatar-data:/app/wwwroot/uploads/avatars
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -107,7 +107,7 @@ services:
     ports:
       - "5002:80"
     volumes:
-      - ./uploads/VenuePhotos:/app/uploads  
+      - venue-data:/app/uploads
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -141,7 +141,7 @@ services:
     ports:
       - "5003:80"
     volumes:
-      - ./uploads/PostPhotos:/app/wwwroot/uploads/posts
+      - post-data:/app/wwwroot/uploads/posts
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -252,3 +252,6 @@ networks:
 
 volumes:
   mssql-data:
+  avatar-data:
+  venue-data:
+  post-data:  
