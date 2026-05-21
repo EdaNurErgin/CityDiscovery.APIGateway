@@ -126,8 +126,8 @@ services:
       - RabbitMQ__Username=guest
       - RabbitMQ__Password=guest
       - Elasticsearch__Url=http://elasticsearch:9200
-      - LocalFileStorageOptions__RootPath=/app/uploads
-      - LocalFileStorageOptions__BaseUrl=http://172.20.10.3:5000
+      - LocalFileStorage__RootPath=/app/uploads
+      - LocalFileStorage__BaseUrl=http://172.20.10.3:5000
     networks:
       - citydiscovery-network
     restart: unless-stopped
